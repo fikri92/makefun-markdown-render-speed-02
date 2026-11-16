@@ -1,12 +1,11 @@
-// Fast drop-in for marked 18.1.3 (MIT). Fork: vendor/marked/marked.esm.js unmodified.
-// Optimisasi: opsi dihitung sekali (tanpa merge per panggilan) dan pipeline
-// Lexer→Parser dipanggil langsung, menghindari overhead marked.parse().
-// Output harus identik byte-per-byte dengan marked dengan opsi default (GFM on, async off).
+// Fast drop-in for marked 18.1.3 (MIT). Vendor marked unmodified (vendor/marked/*).
+// Optimisasi: satu objek opsi dipakai ulang (tanpa merge opsi tiap panggilan) dan
+// pipeline Lexer→Parser dipanggil langsung, melewati marked.parse().
 import * as M from './vendor/marked/marked.esm.js';
 
-const OPTIONS = Object.freeze({ ...M.getDefaults(), gfm: true, async: false });
+const OPTIONS = { ...M.getDefaults(), gfm: true, async: false };
 
-/** HTML untuk `markdown`, sama persis dengan marked.parse(markdown). */
+/** HTML untuk `markdown`, identik dengan marked.parse(markdown). */
 export function parse(markdown) {
   return M.parser(M.lexer(markdown, OPTIONS), OPTIONS);
 }
